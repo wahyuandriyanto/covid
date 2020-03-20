@@ -1,0 +1,64 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Covid-19 Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="dist/css/style.css" />
+  </head>
+  <body>
+    <div class="dashboard">
+      <div class="dashboard__nav">
+        <div class="dashboard__nav-logo">
+          <img src="dist/img/logo.svg" />
+        </div>
+        <div class="dashboard__nav-full">
+          <img src="dist/img/fullscreen.svg" />
+        </div>
+      </div>
+      <div class="dashboard__body">
+        <div class="title">
+          Indonesia Coronavirus Live Updates
+        </div>
+        <div class="highlight">
+          <div class="highlight__flag">
+            <img src="dist/img/indonesia.png" />
+          </div>
+          <div class="highlight__total">
+            <div class="highlight__total-number"></div>
+            <div class="highlight__total-status">
+              Positif
+            </div>
+          </div>
+          <div class="highlight__detail">
+            <div class="highlight__detail-content">
+              <div class="content-text">
+                <div class="content-text__number" id="perawatan"></div>
+                <div class="content-text__status">
+                  Perawatan
+                </div>
+              </div>
+              <div class="content-text">
+                <div class="content-text__number" id="sembuh"></div>
+                <div class="content-text__status">
+                  Sembuh
+                </div>
+              </div>
+              <div class="content-text">
+                <div class="content-text__number" id="meninggal"></div>
+                <div class="content-text__status">
+                  Meninggal
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="detail-province">
+          <div class="detail-province__title">
+            Kasus per Provinsi
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="dist/js/index.js"></script>
+  </body>
+</html>
