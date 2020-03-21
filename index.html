@@ -3,6 +3,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Covid-19 Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="dist/css/Chart.min.css" />
     <link rel="stylesheet" type="text/css" href="dist/css/style.css" />
   </head>
   <body>
@@ -52,6 +53,12 @@
             </div>
           </div>
         </div>
+        <div class="detail-case">
+          <div class="detail-case__title">
+            Penambahan Jumlah Kasus per Hari
+          </div>
+          <canvas id="myChart" width="300" height="300"></canvas>
+        </div>
         <div class="detail-province">
           <div class="detail-province__title">
             Kasus per Provinsi
@@ -59,6 +66,7 @@
         </div>
       </div>
     </div>
+    <script type="text/javascript" src="dist/js/Chart.min.js"></script>
     <script type="text/javascript" src="dist/js/index.js"></script>
   </body>
 </html>

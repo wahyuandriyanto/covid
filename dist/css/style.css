@@ -130,8 +130,15 @@ body {
   color: #6e6d7a;
   font-size: 12px;
 }
-.dashboard__body .detail-province {
+.dashboard__body .detail-case {
   padding-top: 72px;
+}
+.dashboard__body .detail-case__title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.dashboard__body .detail-province {
+  padding-top: 16px;
 }
 .dashboard__body .detail-province__title {
   font-size: 16px;

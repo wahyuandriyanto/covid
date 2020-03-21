@@ -1,76 +1,28 @@
-var positif = new XMLHttpRequest();
-positif.open(
-  "GET",
-  "https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/Statistik_Perkembangan_COVID19_Indonesia/FeatureServer/0/query?f=json&where=Tanggal%3E%3Dtimestamp%20%272020-03-19%2017%3A00%3A00%27%20AND%20Tanggal%3C%3Dtimestamp%20%272020-03-20%2016%3A59%3A59%27&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22Jumlah_Kasus_Kumulatif%22%2C%22outStatisticFieldName%22%3A%22value%22%7D%5D&outSR=102100&cacheHint=true",
-  true
-);
-positif.onload = function() {
-  var data = JSON.parse(this.response);
-  if (positif.status >= 200 && positif.status < 400) {
-    data.features.forEach(covid => {
-      document.querySelector(".highlight__total-number").innerHTML =
-        covid.attributes.value;
-      console.log(covid.attributes.value);
+var indo = new XMLHttpRequest();
+indo.open("GET", "https://api.kawalcorona.com/indonesia/", true);
+indo.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var data = JSON.parse(this.response);
+    var positif = data.map(function(e) {
+      return e.positif;
     });
+    var sembuh = data.map(function(e) {
+      return e.sembuh;
+    });
+    var meninggal = data.map(function(e) {
+      return e.meninggal;
+    });
+    var perawatan = parseInt(positif + sembuh + meninggal);
+    document.querySelector(".highlight__total-number").innerHTML = parseInt(positif);
+    document.querySelector("#sembuh").innerHTML = parseInt(sembuh);
+    document.querySelector("#meninggal").innerHTML = parseInt(meninggal);
+    document.querySelector("#perawatan").innerHTML = parseInt(positif) - parseInt(sembuh) - parseInt(meninggal);
   } else {
     console.log("error");
   }
 };
-positif.send();
+indo.send();
 
-var perawatan = new XMLHttpRequest();
-perawatan.open(
-  "GET",
-  "https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/Statistik_Perkembangan_COVID19_Indonesia/FeatureServer/0/query?f=json&where=Tanggal%3E%3Dtimestamp%20%272020-03-19%2017%3A00%3A00%27%20AND%20Tanggal%3C%3Dtimestamp%20%272020-03-20%2016%3A59%3A59%27&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22Jumlah_pasien_dalam_perawatan%22%2C%22outStatisticFieldName%22%3A%22value%22%7D%5D&outSR=102100&cacheHint=true",
-  true
-);
-perawatan.onload = function() {
-  var data = JSON.parse(this.response);
-  if (perawatan.status >= 200 && perawatan.status < 400) {
-    data.features.forEach(covid => {
-      document.querySelector("#perawatan").innerHTML = covid.attributes.value;
-    });
-  } else {
-    console.log("error");
-  }
-};
-perawatan.send();
-
-var sembuh = new XMLHttpRequest();
-sembuh.open(
-  "GET",
-  "https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/Statistik_Perkembangan_COVID19_Indonesia/FeatureServer/0/query?f=json&where=Tanggal%3E%3Dtimestamp%20%272020-03-19%2017%3A00%3A00%27%20AND%20Tanggal%3C%3Dtimestamp%20%272020-03-20%2016%3A59%3A59%27&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22Jumlah_Pasien_Sembuh%22%2C%22outStatisticFieldName%22%3A%22value%22%7D%5D&outSR=102100&cacheHint=true",
-  true
-);
-sembuh.onload = function() {
-  var data = JSON.parse(this.response);
-  if (sembuh.status >= 200 && sembuh.status < 400) {
-    data.features.forEach(covid => {
-      document.querySelector("#sembuh").innerHTML = covid.attributes.value;
-    });
-  } else {
-    console.log("error");
-  }
-};
-sembuh.send();
-
-var meninggal = new XMLHttpRequest();
-meninggal.open(
-  "GET",
-  "https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/Statistik_Perkembangan_COVID19_Indonesia/FeatureServer/0/query?f=json&where=Tanggal%3E%3Dtimestamp%20%272020-03-19%2017%3A00%3A00%27%20AND%20Tanggal%3C%3Dtimestamp%20%272020-03-20%2016%3A59%3A59%27&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&outStatistics=%5B%7B%22statisticType%22%3A%22sum%22%2C%22onStatisticField%22%3A%22Jumlah_Pasien_Meninggal%22%2C%22outStatisticFieldName%22%3A%22value%22%7D%5D&outSR=102100&cacheHint=true",
-  true
-);
-meninggal.onload = function() {
-  var data = JSON.parse(this.response);
-  if (meninggal.status >= 200 && meninggal.status < 400) {
-    data.features.forEach(covid => {
-      document.querySelector("#meninggal").innerHTML = covid.attributes.value;
-    });
-  } else {
-    console.log("error");
-  }
-};
-meninggal.send();
 
 var provinsi = new XMLHttpRequest();
 provinsi.open(
@@ -80,18 +32,23 @@ provinsi.open(
 );
 provinsi.onload = function() {
   var data = JSON.parse(this.response);
-  if (provinsi.status >= 200 && provinsi.status < 400) {
+  if (this.status >= 200 && this.status < 400) {
     data.features.forEach(covid => {
       var div = document.createElement("DIV");
       div.setAttribute("class", "detail-province__list");
-      div.innerHTML = `
+      div.innerHTML =
+        `
       <div class="detail-province__list-marker"></div>
       <div class="detail-province__list-data">
-      <div class="data-province">`+covid.attributes.Provinsi+`</div>
+      <div class="data-province">` +
+        covid.attributes.Provinsi +
+        `</div>
       <div class="data-covid">
         <div class="data-covid__detail">
           <div class="data-covid__detail-number">
-            `+covid.attributes.Kasus_Terkonfirmasi_Akumulatif+`
+            ` +
+        covid.attributes.Kasus_Terkonfirmasi_Akumulatif +
+        `
           </div>
           <div class="data-covid__detail-status">
             Terkonfirmasi
@@ -99,7 +56,9 @@ provinsi.onload = function() {
         </div>
         <div class="data-covid__detail">
           <div class="data-covid__detail-number">
-            `+covid.attributes.Kasus_Sembuh_Akumulatif+`
+            ` +
+        covid.attributes.Kasus_Sembuh_Akumulatif +
+        `
           </div>
           <div class="data-covid__detail-status">
             Sembuh
@@ -107,7 +66,9 @@ provinsi.onload = function() {
         </div>
         <div class="data-covid__detail">
           <div class="data-covid__detail-number">
-            `+covid.attributes.Kasus_Meninggal_Akumulatif+`
+            ` +
+        covid.attributes.Kasus_Meninggal_Akumulatif +
+        `
           </div>
           <div class="data-covid__detail-status">
             Meninggal
@@ -117,10 +78,6 @@ provinsi.onload = function() {
     </div>
       `;
       document.querySelector(".detail-province").appendChild(div);
-      console.log(covid.attributes.Provinsi);
-      //covid.attributes.Kasus_Terkonfirmasi_Akumulatif;
-      //covid.attributes.Kasus_Sembuh_Akumulatif;
-      //covid.attributes.Kasus_Meninggal_Akumulatif;
     });
   } else {
     console.log("error");
@@ -128,7 +85,83 @@ provinsi.onload = function() {
 };
 provinsi.send();
 
-document.querySelector('.dashboard__nav-full').addEventListener('click', function(){
+function BuildChart(labels, values) {
+  var data = {
+    labels: labels,
+    datasets: [
+      {
+        label: "whatever", // Name the series
+        data: values,
+        backgroundColor: [
+          "rgb(54, 162, 235)",
+          "rgb(54, 162, 235)",
+          "rgb(54, 162, 235)",
+          "rgb(54, 162, 235)",
+          "rgb(54, 162, 235)",
+          "rgb(54, 162, 235)",
+          "rgb(54, 162, 235)",
+          "rgb(54, 162, 235)",
+          "rgb(54, 162, 235)",
+          "rgb(54, 162, 235)"
+        ]
+      }
+    ]
+  };
+  var ctx = document.getElementById("myChart").getContext("2d");
+  var myChart = new Chart(ctx, {
+    type: "bar",
+    data: data,
+    options: {
+      responsive: true, // Instruct chart JS to respond nicely.
+      maintainAspectRatio: false, // Add to prevent default behavior of full-width/height
+      scales: {
+        xAxes: [
+          {
+            scaleLabel: {
+              display: true,
+              labelString: "$ Billion"
+            }
+          }
+        ],
+        yAxes: [
+          {
+            scaleLabel: {
+              display: true,
+              labelString: "Name"
+            }
+          }
+        ]
+      }
+    }
+  });
+  return myChart;
+}
+
+var riwayat = new XMLHttpRequest();
+riwayat.open(
+  "GET",
+  "https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/Statistik_Perkembangan_COVID19_Indonesia/FeatureServer/0/query?f=json&where=Tanggal%3Ctimestamp%20%272020-03-21%2017%3A00%3A00%27&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Tanggal%20asc&outSR=102100&resultOffset=0&resultRecordCount=2000&cacheHint=true",
+  true
+);
+riwayat.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var data = JSON.parse(this.response);
+    var labels = data.features.map(function(e) {
+      return e.attributes.Hari_ke;
+    });
+    var values = data.features.map(function(e) {
+      return e.attributes.Jumlah_Kasus_Kumulatif;
+    });
+    BuildChart(labels, values);
+  } else {
+    console.log("error");
+  }
+};
+riwayat.send();
+
+document
+  .querySelector(".dashboard__nav-full")
+  .addEventListener("click", function() {
     document.documentElement.requestFullscreen();
-    document.documentElement.webkitRequestFullscreen()
-})
+    document.documentElement.webkitRequestFullscreen();
+  });
