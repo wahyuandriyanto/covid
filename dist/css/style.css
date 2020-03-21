@@ -62,6 +62,12 @@ body {
   margin: 0px auto 24px;
   line-height: 29px;
 }
+.dashboard__body .last-update {
+  color: #6e6d7a;
+  text-align: center;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
 .dashboard__body .highlight {
   background-image: linear-gradient(to bottom, #34a5d6, #c43aff);
   width: 100%;
@@ -131,11 +137,12 @@ body {
   font-size: 12px;
 }
 .dashboard__body .detail-case {
-  padding-top: 72px;
+  padding-top: 82px;
 }
 .dashboard__body .detail-case__title {
   font-size: 16px;
   font-weight: 700;
+  padding-bottom: 8px;
 }
 .dashboard__body .detail-province {
   padding-top: 16px;

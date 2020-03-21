@@ -12,17 +12,23 @@ indo.onreadystatechange = function() {
     var meninggal = data.map(function(e) {
       return e.meninggal;
     });
-    var perawatan = parseInt(positif + sembuh + meninggal);
-    document.querySelector(".highlight__total-number").innerHTML = parseInt(positif);
+    var lastUpdate = data.map(function(e) {
+      var date = new Date(e.lastupdate);
+      const newDate = date.toLocaleString(['ban', 'id'], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const newTime = date.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+      return String(newDate)+" | "+String(newTime);
+    });
+    document.querySelector(".highlight__total-number").innerHTML = parseInt(
+      positif
+    );
     document.querySelector("#sembuh").innerHTML = parseInt(sembuh);
     document.querySelector("#meninggal").innerHTML = parseInt(meninggal);
-    document.querySelector("#perawatan").innerHTML = parseInt(positif) - parseInt(sembuh) - parseInt(meninggal);
-  } else {
-    console.log("error");
+    document.querySelector("#perawatan").innerHTML =
+      parseInt(positif) - parseInt(sembuh) - parseInt(meninggal);
+    document.querySelector(".last-update").innerHTML = "Last update: "+lastUpdate[1];  
   }
 };
 indo.send();
-
 
 var provinsi = new XMLHttpRequest();
 provinsi.open(
@@ -79,31 +85,23 @@ provinsi.onload = function() {
       `;
       document.querySelector(".detail-province").appendChild(div);
     });
-  } else {
-    console.log("error");
   }
 };
 provinsi.send();
 
-function BuildChart(labels, values) {
+function BuildChart(hari, jmlKasusBaru, jmlKasus) {
   var data = {
-    labels: labels,
+    labels: hari,
     datasets: [
       {
-        label: "whatever", // Name the series
-        data: values,
-        backgroundColor: [
-          "rgb(54, 162, 235)",
-          "rgb(54, 162, 235)",
-          "rgb(54, 162, 235)",
-          "rgb(54, 162, 235)",
-          "rgb(54, 162, 235)",
-          "rgb(54, 162, 235)",
-          "rgb(54, 162, 235)",
-          "rgb(54, 162, 235)",
-          "rgb(54, 162, 235)",
-          "rgb(54, 162, 235)"
-        ]
+        label: "Kasus Baru", // Name the series
+        data: jmlKasusBaru,
+        backgroundColor: "#34a5d6"
+      },
+      {
+        label: "Jumlah Kasus", // Name the series
+        data: jmlKasus,
+        backgroundColor: "#c43aff"
       }
     ]
   };
@@ -118,8 +116,7 @@ function BuildChart(labels, values) {
         xAxes: [
           {
             scaleLabel: {
-              display: true,
-              labelString: "$ Billion"
+              display: false
             }
           }
         ],
@@ -127,7 +124,7 @@ function BuildChart(labels, values) {
           {
             scaleLabel: {
               display: true,
-              labelString: "Name"
+              labelString: "Jumlah Kasus"
             }
           }
         ]
@@ -146,15 +143,18 @@ riwayat.open(
 riwayat.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {
     var data = JSON.parse(this.response);
-    var labels = data.features.map(function(e) {
-      return e.attributes.Hari_ke;
+    var hari = data.features.map(function(e) {
+      var date = new Date(e.attributes.Tanggal);
+      const newDate = date.toLocaleString(['ban', 'id'], {month: 'short', day: 'numeric' });
+      return newDate;
     });
-    var values = data.features.map(function(e) {
+    var jmlKasus = data.features.map(function(e) {
       return e.attributes.Jumlah_Kasus_Kumulatif;
     });
-    BuildChart(labels, values);
-  } else {
-    console.log("error");
+    var jmlKasusBaru = data.features.map(function(e) {
+      return e.attributes.Jumlah_Kasus_Baru_per_Hari;
+    });
+    BuildChart(hari, jmlKasusBaru, jmlKasus);
   }
 };
 riwayat.send();

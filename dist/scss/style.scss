@@ -60,6 +60,12 @@ body {
       margin: 0px auto 24px;
       line-height: 29px;
     }
+    & .last-update {
+      color: #6e6d7a;
+      text-align: center;
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
     & .highlight {
       background-image: linear-gradient(to bottom, #34a5d6, #c43aff);
       width: 100%;
@@ -129,14 +135,15 @@ body {
       }
     }
     & .detail-case {
-      padding-top: 72px;
+      padding-top: 82px;
       &__title {
         font-size: 16px;
         font-weight: 700;
+        padding-bottom: 8px;
       }
     }
     & .detail-province {
-      padding-top: 16px;
+      padding-top: 24px;
       &__title {
         font-size: 16px;
         font-weight: 700;
