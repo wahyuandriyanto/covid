@@ -1,7 +1,7 @@
 var date = new Date();
 const newDate = date.toLocaleString(['ban', 'id'], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 const newTime = date.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
-document.querySelector(".last-update").innerHTML = String(newDate)+" | "+String(newTime);  
+document.querySelector(".last-update").innerHTML = "Last Update: "+String(newDate)+" | "+String(newTime);  
 
 var indo = new XMLHttpRequest();
 indo.open("GET", "https://api.kawalcorona.com/indonesia/", true);
