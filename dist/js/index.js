@@ -1,31 +1,21 @@
 var indo = new XMLHttpRequest();
-indo.open("GET", "https://api.kawalcorona.com/indonesia/", true);
+indo.open("GET", "https://api.kawalcorona.com", true);
 indo.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {
     var data = JSON.parse(this.response);
-    var positif = data.map(function(e) {
-      return e.positif;
-    });
-    var sembuh = data.map(function(e) {
-      return e.sembuh;
-    });
-    var meninggal = data.map(function(e) {
-      return e.meninggal;
-    });
-    var lastUpdate = data.map(function(e) {
-      var date = new Date(e.lastupdate);
-      const newDate = date.toLocaleString(['ban', 'id'], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-      const newTime = date.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
-      return String(newDate)+" | "+String(newTime);
-    });
-    document.querySelector(".highlight__total-number").innerHTML = parseInt(
-      positif
-    );
-    document.querySelector("#sembuh").innerHTML = parseInt(sembuh);
-    document.querySelector("#meninggal").innerHTML = parseInt(meninggal);
-    document.querySelector("#perawatan").innerHTML =
-      parseInt(positif) - parseInt(sembuh) - parseInt(meninggal);
-    document.querySelector(".last-update").innerHTML = "Last update: "+lastUpdate[1];  
+    for (var i = 0; i < data.length; i++) {
+      if(data[i].attributes.Country_Region == "Indonesia") {
+        console.log(data[i].attributes.Confirmed);
+        document.querySelector(".highlight__total-number").innerHTML = data[i].attributes.Confirmed;
+        document.querySelector("#perawatan").innerHTML = data[i].attributes.Active;
+        document.querySelector("#sembuh").innerHTML = data[i].attributes.Recovered;
+        document.querySelector("#meninggal").innerHTML = data[i].attributes.Deaths;
+        var update = new Date(data[i].attributes.Last_Update);
+        const newDate = update.toLocaleString(['ban', 'id'], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        const newTime = update.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+        document.querySelector(".last-update").innerHTML = String(newDate)+" | "+String(newTime);
+      };
+    }
   }
 };
 indo.send();
