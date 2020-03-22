@@ -124,10 +124,19 @@ function BuildChart(hari, jmlKasusBaru, jmlKasus) {
   return myChart;
 }
 
+function currentDate() {
+  var today = new Date();
+  var dd = String(today.getDate());
+  var mm = String(today.getMonth()+1);
+  var yy = String(today.getFullYear());
+  return (yy+"-"+mm+"-"+dd);
+}
+
+
 var riwayat = new XMLHttpRequest();
+var url = "https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/Statistik_Perkembangan_COVID19_Indonesia/FeatureServer/0/query?f=json&where=Tanggal%3Ctimestamp%20%27"+currentDate()+"%2017%3A00%3A00%27&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Tanggal%20asc&outSR=102100&resultOffset=0&resultRecordCount=2000&cacheHint=true";
 riwayat.open(
-  "GET",
-  "https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/Statistik_Perkembangan_COVID19_Indonesia/FeatureServer/0/query?f=json&where=Tanggal%3Ctimestamp%20%272020-03-21%2017%3A00%3A00%27&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Tanggal%20asc&outSR=102100&resultOffset=0&resultRecordCount=2000&cacheHint=true",
+  "GET", url,
   true
 );
 riwayat.onreadystatechange = function() {
@@ -155,3 +164,5 @@ document
     document.documentElement.requestFullscreen();
     document.documentElement.webkitRequestFullscreen();
   });
+
+  
