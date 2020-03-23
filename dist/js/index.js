@@ -1,7 +1,17 @@
 var date = new Date();
-const newDate = date.toLocaleString(['ban', 'id'], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-const newTime = date.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
-document.querySelector(".last-update").innerHTML = "Last Update: "+String(newDate)+" | "+String(newTime);  
+const newDate = date.toLocaleString(["ban", "id"], {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric"
+});
+const newTime = date.toLocaleTimeString("en-US", {
+  hour12: false,
+  hour: "2-digit",
+  minute: "2-digit"
+});
+document.querySelector(".last-update").innerHTML =
+  "Last Update: " + String(newDate) + " | " + String(newTime);
 
 var indo = new XMLHttpRequest();
 indo.open("GET", "https://api.kawalcorona.com/indonesia/", true);
@@ -29,14 +39,11 @@ indo.onreadystatechange = function() {
 indo.send();
 
 var provinsi = new XMLHttpRequest();
-provinsi.open(
-  "GET",
-  "https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/COVID19_Indonesia_per_Provinsi/FeatureServer/0/query?f=json&where=Provinsi%20%3C%3E%20%27Indonesia%27&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Kasus_Terkonfirmasi_Akumulatif%20desc&outSR=102100&resultOffset=0&resultRecordCount=34&cacheHint=true",
-  true
-);
-provinsi.onload = function() {
+provinsi.open("GET", "https://api.kawalcorona.com/indonesia/provinsi/", true);
+provinsi.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {
-    data.features.forEach(covid => {
+    var data = JSON.parse(this.response);
+    for (var i = 0; i < data.length; i++) {
       var div = document.createElement("DIV");
       div.setAttribute("class", "detail-province__list");
       div.innerHTML =
@@ -44,13 +51,13 @@ provinsi.onload = function() {
       <div class="detail-province__list-marker"></div>
       <div class="detail-province__list-data">
       <div class="data-province">` +
-        covid.attributes.Provinsi +
+        data[i].attributes.Provinsi +
         `</div>
       <div class="data-covid">
         <div class="data-covid__detail">
           <div class="data-covid__detail-number">
             ` +
-        covid.attributes.Kasus_Terkonfirmasi_Akumulatif +
+        data[i].attributes.Kasus_Posi +
         `
           </div>
           <div class="data-covid__detail-status">
@@ -60,7 +67,7 @@ provinsi.onload = function() {
         <div class="data-covid__detail">
           <div class="data-covid__detail-number">
             ` +
-        covid.attributes.Kasus_Sembuh_Akumulatif +
+        data[i].attributes.Kasus_Semb +
         `
           </div>
           <div class="data-covid__detail-status">
@@ -70,7 +77,7 @@ provinsi.onload = function() {
         <div class="data-covid__detail">
           <div class="data-covid__detail-number">
             ` +
-        covid.attributes.Kasus_Meninggal_Akumulatif +
+        data[i].attributes.Kasus_Meni +
         `
           </div>
           <div class="data-covid__detail-status">
@@ -81,12 +88,7 @@ provinsi.onload = function() {
     </div>
       `;
       document.querySelector(".detail-province").appendChild(div);
-    });
-  }
-  else {
-    var div = document.createElement("DIV");
-    div.setAttribute("class", "detail-province__list");
-    div.innerHTML= "Data tidak ditemukan"
+    }
   }
 };
 provinsi.send();
@@ -139,24 +141,26 @@ function BuildChart(hari, jmlKasusBaru, jmlKasus) {
 function currentDate() {
   var today = new Date();
   var dd = String(today.getDate());
-  var mm = String(today.getMonth()+1);
+  var mm = String(today.getMonth() + 1);
   var yy = String(today.getFullYear());
-  return (yy+"-"+mm+"-"+dd);
+  return yy + "-" + mm + "-" + dd;
 }
 
-
 var riwayat = new XMLHttpRequest();
-var url = "https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/Statistik_Perkembangan_COVID19_Indonesia/FeatureServer/0/query?f=json&where=Tanggal%3Ctimestamp%20%27"+currentDate()+"%2017%3A00%3A00%27&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Tanggal%20asc&outSR=102100&resultOffset=0&resultRecordCount=2000&cacheHint=true";
-riwayat.open(
-  "GET", url,
-  true
-);
+var url =
+  "https://services5.arcgis.com/VS6HdKS0VfIhv8Ct/arcgis/rest/services/Statistik_Perkembangan_COVID19_Indonesia/FeatureServer/0/query?f=json&where=Tanggal%3Ctimestamp%20%27" +
+  currentDate() +
+  "%2017%3A00%3A00%27&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Tanggal%20asc&outSR=102100&resultOffset=0&resultRecordCount=2000&cacheHint=true";
+riwayat.open("GET", url, true);
 riwayat.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {
     var data = JSON.parse(this.response);
     var hari = data.features.map(function(e) {
       var date = new Date(e.attributes.Tanggal);
-      const newDate = date.toLocaleString(['ban', 'id'], {month: 'short', day: 'numeric' });
+      const newDate = date.toLocaleString(["ban", "id"], {
+        month: "short",
+        day: "numeric"
+      });
       return newDate;
     });
     var jmlKasus = data.features.map(function(e) {
@@ -176,5 +180,3 @@ document
     document.documentElement.requestFullscreen();
     document.documentElement.webkitRequestFullscreen();
   });
-
-  
