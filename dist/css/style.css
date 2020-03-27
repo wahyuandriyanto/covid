@@ -145,7 +145,7 @@ body {
   padding-bottom: 8px;
 }
 .dashboard__body .detail-province {
-  padding-top: 16px;
+  padding-top: 24px;
 }
 .dashboard__body .detail-province__title {
   font-size: 16px;
@@ -156,15 +156,7 @@ body {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.24);
   border-radius: 8px;
   position: relative;
-}
-.dashboard__body .detail-province__list-marker {
-  position: absolute;
-  top: 1px;
-  left: 0px;
-  bottom: 1px;
-  width: 4px;
-  background-color: #c43aff;
-  border-radius: 4px;
+  border-left: 4px solid #c43aff;
 }
 .dashboard__body .detail-province__list-data {
   padding: 16px;

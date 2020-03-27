@@ -27,13 +27,11 @@ indo.onreadystatechange = function() {
     var meninggal = data.map(function(e) {
       return e.meninggal;
     });
-    document.querySelector(".highlight__total-number").innerHTML = parseInt(
-      positif
-    );
-    document.querySelector("#sembuh").innerHTML = parseInt(sembuh);
-    document.querySelector("#meninggal").innerHTML = parseInt(meninggal);
-    document.querySelector("#perawatan").innerHTML =
-      parseInt(positif) - parseInt(sembuh) - parseInt(meninggal);
+    var positifInt = positif[0].split(',').join('');
+    document.querySelector(".highlight__total-number").innerHTML = positif;
+    document.querySelector("#sembuh").innerHTML = sembuh;
+    document.querySelector("#meninggal").innerHTML = meninggal;
+    document.querySelector("#perawatan").innerHTML = positifInt - sembuh - meninggal;
   }
 };
 indo.send();
@@ -48,7 +46,6 @@ provinsi.onreadystatechange = function() {
       div.setAttribute("class", "detail-province__list");
       div.innerHTML =
         `
-      <div class="detail-province__list-marker"></div>
       <div class="detail-province__list-data">
       <div class="data-province">` +
         data[i].attributes.Provinsi +
