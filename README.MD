@@ -1,5 +1,5 @@
 # Covid19 Dashboard
 
-* https://wahyuandriyanto.github.io/covid19
+* https://wahyuandriyanto.github.io/covid
 
 * Api from https://api.kawalcorona.com
